@@ -1,4 +1,5 @@
-&>>$LOG_FILE==/tmp/roboshop.log
+# shellcheck disable=SC2275
+&>>$LOG_FILE == /tmp/roboshop.log
 rm -f $LOG_FILE
 
 PRINT(){
