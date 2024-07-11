@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_FILE=/tmp/roboshop.log
-source /path/to/common.sh  # Use the full path to common.sh
+source C:\Users\wahee\github-repos\robo-shop\common.sh  # Use the full path to common.sh
 
 component=catalogue
 cp mongo.repo /etc/yum.repos.d/mongo.repo
