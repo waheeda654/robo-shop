@@ -1,14 +1,18 @@
 #!/bin/bash
-
+source common.sh
 LOG_FILE=/tmp/roboshop.log
-source C:\Users\wahee\github-repos\robo-shop\common.sh  # Use the full path to common.sh
+#source C:\Users\wahee\github-repos\robo-shop\common.sh  # Use the full path to common.sh
 
 component=catalogue
+NODEJS
+
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 cp catalogue.service /etc/systemd/system/${component}.service
 
-NODEJS
 
+
+
+echo Install momgodb client
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 if [ $? -eq 0 ]; then
     echo Success
