@@ -1,7 +1,9 @@
 LOG_FILE=/tmp/roboshop.log
 source common.sh
-cp catalogue.service /etc/systemd/system/catalogue.service
+
 component=catalogue
+cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp catalogue.service /etc/systemd/system/{$component}.service
 {
   echo "Setting up NodeJS environment..." &>>$LOG_FILE
   # Add NodeJS setup commands here
