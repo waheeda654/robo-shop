@@ -10,5 +10,14 @@ cp catalogue.service /etc/systemd/system/{$component}.service
 }
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
+if [ $? -eq 0 ]; then
+    echo Sucess
+  else
+      echo Failure
+  fi
 mongosh --host mongodb.dev.wdevops.fun </app/db/master-data.js &>>$LOG_FILE
-echo $?
+if [ $? -eq 0 ]; then
+    echo Sucess
+  else
+      echo Failure
+  fi
