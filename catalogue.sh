@@ -1,5 +1,6 @@
 LOG_FILE=/tmp/roboshop.log
 source common.sh
+cp catalogue.service /etc/systemd/system/catalogue.service
 component=catalogue
 {
   echo "Setting up NodeJS environment..." &>>$LOG_FILE
