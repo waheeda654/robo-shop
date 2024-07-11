@@ -1,4 +1,4 @@
-# shellcheck disable=SC2275
+#!/bin/bash
 LOG_FILE=/tmp/roboshop.log
 rm -f $LOG_FILE
 
@@ -10,96 +10,95 @@ PRINT(){
 }
 
 NODEJS(){
-  PRINT disable nodejs default version
+  PRINT "Disable NodeJS default version"
   dnf module disable nodejs -y &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
+      echo Success
   else
         echo Failure
   fi
 
-  PRINT node js 20 module
+  PRINT "Enable NodeJS 20 module"
   dnf module enable nodejs:20 -y &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
+      echo Success
   else
         echo Failure
   fi
 
-  PRINT install nodejs
+  PRINT "Install NodeJS"
   dnf install nodejs -y &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
+      echo Success
   else
         echo Failure
   fi
 
-  PRINT copy service file
-  cp {$component}.service /etc/systemd/system/{$component}.service &>>$LOG_FILE
- if [ $? -eq 0 ]; then
-     echo Sucess
-   else
-       echo Failure
-   fi
+  PRINT "Copy service file"
+  cp ${component}.service /etc/systemd/system/${component}.service &>>$LOG_FILE
+  if [ $? -eq 0 ]; then
+      echo Success
+  else
+        echo Failure
+  fi
 
-  #cp mongo.repo /etc/yum.repos.d/mongo.repo
-  PRINT adding application user
+  PRINT "Adding application user"
   useradd roboshop &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 
-  PRINT cleaning old file
+  PRINT "Cleaning old files"
   rm -rf /app &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 
-  PRINT create app dorectory
-  mkdir /appy &>>$LOG_FILE
+  PRINT "Create app directory"
+  mkdir /app &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 
-  PRINT download app content
-  curl -o /tmp/{$component}.zip https://roboshop-artifacts.s3.amazonaws.com/{$component}-v3.zip &>>$LOG_FILE
+  PRINT "Download app content"
+  curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}-v3.zip &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 
-  PRINT extract app content
+  PRINT "Extract app content"
   cd /app
-  unzip /tmp/{$component}.zip &>>$LOG_FILE
+  unzip /tmp/${component}.zip &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 
-  PRINT download nodejs dependencies
+  PRINT "Download NodeJS dependencies"
   cd /app
   npm install &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 
-PRINT start service
+  PRINT "Start service"
   systemctl daemon-reload &>>$LOG_FILE
-  systemctl enable {$component} &>>$LOG_FILE
-  systemctl start {$component} &>>$LOG_FILE
+  systemctl enable ${component} &>>$LOG_FILE
+  systemctl start ${component} &>>$LOG_FILE
   if [ $? -eq 0 ]; then
-      echo Sucess
-    else
+      echo Success
+  else
         echo Failure
-    fi
+  fi
 }

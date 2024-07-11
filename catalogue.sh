@@ -1,23 +1,29 @@
+#!/bin/bash
+
 LOG_FILE=/tmp/roboshop.log
-source common.sh
+source /path/to/common.sh  # Use the full path to common.sh
 
 component=catalogue
 cp mongo.repo /etc/yum.repos.d/mongo.repo
-cp catalogue.service /etc/systemd/system/{$component}.service
-{
-  echo "Setting up NodeJS environment..." &>>$LOG_FILE
-  # Add NodeJS setup commands here
-}
+cp catalogue.service /etc/systemd/system/${component}.service
+
+NODEJS
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 if [ $? -eq 0 ]; then
-    echo Sucess
-  else
-      echo Failure
-  fi
+    echo Success
+else
+    echo Failure
+fi
+
+if [ ! -f /app/db/master-data.js ]; then
+  echo "/app/db/master-data.js: No such file or directory" &>>$LOG_FILE
+  exit 1
+fi
+
 mongosh --host mongodb.dev.wdevops.fun </app/db/master-data.js &>>$LOG_FILE
 if [ $? -eq 0 ]; then
-    echo Sucess
-  else
-      echo Failure
-  fi
+    echo Success
+else
+    echo Failure
+fi
