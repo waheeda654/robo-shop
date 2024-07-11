@@ -11,9 +11,9 @@ PRINT(){
 
 STAT(){
   if [ $? -eq 0 ]; then
-        echo Success
+        echo -e "\e[32mSuccess\e[0m"
     else
-          echo Failure
+          echo -e "\e[31mFailure\e[0m"
     fi
 }
 
