@@ -14,53 +14,54 @@ STAT(){
         echo -e "\e[32mSuccess\e[0m"
     else
           echo -e "\e[31mFailure\e[0m"
+          exit
     fi
 }
 
 NODEJS(){
-  PRINT "Disable NodeJS default version"
+  PRINT Disable NodeJS default version
   dnf module disable nodejs -y &>>$LOG_FILE
 
 
-  PRINT "Enable NodeJS 20 module"
+  PRINT Enable NodeJS 20 module
   dnf module enable nodejs:20 -y &>>$LOG_FILE
   STAT $?
 
-  PRINT "Install NodeJS"
+  PRINT Install NodeJS
   dnf install nodejs -y &>>$LOG_FILE
   STAT $?
 
-  PRINT "Copy service file"
+  PRINT Copy service file
   cp ${component}.service /etc/systemd/system/${component}.service &>>$LOG_FILE
   STAT $?
 
-  PRINT "Adding application user"
+  PRINT Adding application user
   useradd roboshop &>>$LOG_FILE
   STAT $?
 
-  PRINT "Cleaning old files"
+  PRINT Cleaning old files
   rm -rf /app &>>$LOG_FILE
   STAT $?
 
-  PRINT "Create app directory"
+  PRINT Create app directory
   mkdir /app &>>$LOG_FILE
   STAT $?
 
-  PRINT "Download app content"
+  PRINT Download app content
   curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}-v3.zip &>>$LOG_FILE
   STAT $?
 
-  PRINT "Extract app content"
+  PRINT Extract app content
   cd /app
   unzip /tmp/${component}.zip &>>$LOG_FILE
   STAT $?
 
-  PRINT "Download NodeJS dependencies"
+  PRINT Download NodeJS dependencies
   cd /app
   npm install &>>$LOG_FILE
   STAT $?
 
-  PRINT "Start service"
+  PRINT Start service
   systemctl daemon-reload &>>$LOG_FILE
   systemctl enable ${component} &>>$LOG_FILE
   systemctl start ${component} &>>$LOG_FILE
